@@ -1,25 +1,25 @@
+const fileWriter = require('./lib/fileWriter')
 const IPFS = require('./lib/ipfs')
 const ipfs = new IPFS()
 const fs = require('fs')
 const path = require('path')
 
 // Example data
-let folder = path.join(__dirname, 'examples')
-console.log(folder)
-let content = fs.readFileSync(folder)
+let examplePath = 'examples'
+let folder = path.join(__dirname, examplePath)
+
 
 async function main () {
     ipfs.init(async function (err, response) {
-        console.log('done init')
+        let directory = await ipfs.create(examplePath)
 
-        let create = await ipfs.create()
-        console.log('create hash', create)
+        let newDirectory = await ipfs.push(directory, folder)
 
-        let push = await ipfs.push(content)
-        console.log('push hash', push)
+        let files = await ipfs.get(newDirectory)
 
-        let get = await ipfs.get(push)
-        console.log(get)
+        fileWriter.write(files)
+
+        process.exit()
     })
 }
 
