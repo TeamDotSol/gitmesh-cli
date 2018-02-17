@@ -8,7 +8,6 @@ const path = require('path')
 let examplePath = 'examples'
 let folder = path.join(__dirname, examplePath)
 
-
 async function main () {
     ipfs.init(async function (err, response) {
         let directory = await ipfs.create(examplePath)
